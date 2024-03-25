@@ -20,11 +20,11 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "inbound_tcp_5432" {
-  security_group_id = aws_security_group.rds.id
-  from_port         = 5432
-  to_port           = 543
-  ip_protocol       = "tcp"
-  cidr_ipv4         = aws_vpc.main.cidr_block
+  security_group_id            = aws_security_group.rds.id
+  from_port                    = 5432
+  to_port                      = 543
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = aws_security_group.bastion.id
 }
 
 resource "aws_db_instance" "main" {
