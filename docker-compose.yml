@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   terraform:
-    image: hashicorp/terraform:0.12.21
+    image: hashicorp/terraform:latest
     volumes:
       - .:/infra
     working_dir: /infra

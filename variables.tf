@@ -6,3 +6,13 @@ variable "prefix" {
 variable "project" {
   default = "beatrunner"
 }
+
+variable "db_username" {
+  type        = string
+  description = "Username for RDS Postgres"
+}
+
+variable "db_password" {
+  type        = string
+  description = "Password for RDS Postgres"
+}
