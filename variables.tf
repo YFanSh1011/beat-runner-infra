@@ -16,3 +16,9 @@ variable "db_password" {
   type        = string
   description = "Password for RDS Postgres"
 }
+
+variable "bastion_key_name" {
+  default     = "beat-runner-keypair"
+  type        = string
+  description = "Keypair for bastion host to SSH to instances in private subnets"
+}
