@@ -10,6 +10,7 @@ data "aws_ami" "amazon_linux" {
 
 resource "aws_instance" "bastion_host" {
   instance_type = "t2.micro"
+  user_data     = file("./templates/bastion/user-data.sh")
   ami           = data.aws_ami.amazon_linux.image_id
 
   tags = merge(
