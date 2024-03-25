@@ -13,6 +13,8 @@ resource "aws_instance" "bastion" {
   user_data            = file("./templates/bastion/user-data.sh")
   ami                  = data.aws_ami.amazon_linux.image_id
   iam_instance_profile = aws_iam_instance_profile.bastion.name
+  key_name             = var.bastion_key_name
+  subnet_id            = aws_subnet.public_a.id
 
   tags = merge(
     local.common_tags,
