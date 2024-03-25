@@ -38,3 +38,42 @@ resource "aws_iam_instance_profile" "bastion" {
   name = "${local.prefix}-bastion-instance-profile"
   role = aws_iam_role.bastion.name
 }
+
+resource "aws_security_group" "bastion" {
+  name   = "${local.prefix}-bastion"
+  vpc_id = aws_vpc.main.id
+
+  tags = local.common_tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_inbound_ssh" {
+  security_group_id = aws_security_group.bastion.id
+  ip_protocol       = "tcp"
+  from_port         = 22
+  to_port           = 22
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_outbound_http" {
+  security_group_id = aws_security_group.bastion.id
+  ip_protocol       = "tcp"
+  from_port         = 80
+  to_port           = 80
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_outbound_https" {
+  security_group_id = aws_security_group.bastion.id
+  ip_protocol       = "tcp"
+  from_port         = 443
+  to_port           = 443
+  cidr_ipv4         = "0.0.0.0/0"
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_outbound_private_postgres" {
+  security_group_id            = aws_security_group.bastion.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+  referenced_security_group_id = aws_db_subnet_group.main.id
+}
