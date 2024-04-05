@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "bpm_service" {
     db_user           = aws_db_instance.main.username
     db_pass           = aws_db_instance.main.password
     log_group_name    = aws_cloudwatch_log_group.ecs_task_logs.name
-    log_group_region  = data.aws_region.current
+    log_group_region  = data.aws_region.current.name
   })
 
   requires_compatibilities = ["FARGATE"]
@@ -72,7 +72,7 @@ resource "aws_ecs_task_definition" "user_collection_service" {
     db_user                       = aws_db_instance.main.username
     db_pass                       = aws_db_instance.main.password
     log_group_name                = aws_cloudwatch_log_group.ecs_task_logs.name
-    log_group_region              = data.aws_region.current
+    log_group_region              = data.aws_region.current.name
   })
 
   requires_compatibilities = ["FARGATE"]
@@ -92,7 +92,7 @@ resource "aws_ecs_task_definition" "auth_service" {
   container_definitions = templatefile("./templates/ecs/tasks/auth-service-task-definition.json", {
     auth_service_image = var.auth_service_image
     log_group_name     = aws_cloudwatch_log_group.ecs_task_logs.name
-    log_group_region   = data.aws_region.current
+    log_group_region   = data.aws_region.current.name
   })
 
   requires_compatibilities = ["FARGATE"]
@@ -114,7 +114,7 @@ resource "aws_ecs_task_definition" "music_repository_service" {
     db_user                        = aws_db_instance.main.username
     db_pass                        = aws_db_instance.main.password
     log_group_name                 = aws_cloudwatch_log_group.ecs_task_logs.name
-    log_group_region               = data.aws_region.current
+    log_group_region               = data.aws_region.current.name
   })
 
   requires_compatibilities = ["FARGATE"]
