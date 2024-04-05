@@ -22,3 +22,23 @@ variable "bastion_key_name" {
   type        = string
   description = "Keypair for bastion host to SSH to instances in private subnets"
 }
+
+variable "bpm_service_image" {
+  description = "ECR image for bpm service"
+  default     = "339522008742.dkr.ecr.ap-southeast-2.amazonaws.com/beat-runner-backend/bpm-service:latest"
+}
+
+variable "auth_service_image" {
+  description = "ECR image for auth service"
+  default     = "339522008742.dkr.ecr.ap-southeast-2.amazonaws.com/beat-runner-backend/auth-service:latest"
+}
+
+variable "user_collection_service_image" {
+  description = "ECR image for user collection service"
+  default     = "339522008742.dkr.ecr.ap-southeast-2.amazonaws.com/beat-runner-backend/user-collection-service:latest"
+}
+
+variable "music_repository_service_image" {
+  description = "ECR image for music repository service"
+  default     = "339522008742.dkr.ecr.ap-southeast-2.amazonaws.com/beat-runner-backend/music-repository-service:latest"
+}
