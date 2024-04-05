@@ -41,7 +41,10 @@ resource "aws_db_instance" "main" {
   backup_retention_period = 0
   multi_az                = false
   skip_final_snapshot     = true
-  vpc_security_group_ids  = [aws_security_group.rds.id]
+  vpc_security_group_ids = [
+    aws_security_group.rds.id,
+    aws_security_group.ecs_service.id
+  ]
 
   tags = merge(
     local.common_tags,

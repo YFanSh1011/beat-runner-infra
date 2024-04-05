@@ -126,3 +126,90 @@ resource "aws_ecs_task_definition" "music_repository_service" {
 
   tags = local.common_tags
 }
+
+
+resource "aws_security_group" "ecs_service" {
+  description = "Access for the ECS services"
+  name        = "${local.prefix}-ecs-service"
+  vpc_id      = aws_vpc.main.id
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_egress_443_a" {
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = aws_subnet.private_a
+  security_group_id = aws_security_group.ecs_service.id
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_egress_443_b" {
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = aws_subnet.private_b
+  security_group_id = aws_security_group.ecs_service.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_ingress_8080" {
+  from_port         = 8080
+  to_port           = 8080
+  ip_protocol       = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  security_group_id = aws_security_group.ecs_service.id
+}
+
+resource "aws_ecs_service" "bpm_service" {
+  name            = "${local.prefix}-bpm-service"
+  cluster         = aws_ecs_cluster.main.name
+  task_definition = aws_ecs_task_definition.bpm_service.family
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
+    security_groups  = [aws_security_group.ecs_service.id]
+    assign_public_ip = false
+  }
+}
+
+resource "aws_ecs_service" "auth_service" {
+  name            = "${local.prefix}-auth-service"
+  cluster         = aws_ecs_cluster.main.name
+  task_definition = aws_ecs_task_definition.auth_service.family
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
+    security_groups  = [aws_security_group.ecs_service.id]
+    assign_public_ip = false
+  }
+}
+
+resource "aws_ecs_service" "user_collection_service" {
+  name            = "${local.prefix}-user_collection-service"
+  cluster         = aws_ecs_cluster.main.name
+  task_definition = aws_ecs_task_definition.user_collection_service.family
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
+    security_groups  = [aws_security_group.ecs_service.id]
+    assign_public_ip = false
+  }
+}
+
+resource "aws_ecs_service" "music_repository_service" {
+  name            = "${local.prefix}-music_repository-service"
+  cluster         = aws_ecs_cluster.main.name
+  task_definition = aws_ecs_task_definition.music_repository_service.family
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
+    security_groups  = [aws_security_group.ecs_service.id]
+    assign_public_ip = false
+  }
+}
