@@ -1,0 +1,23 @@
+[
+  {
+    "name": "auth_service",
+    "image": "${auth_service_image}",
+    "essential": true,
+    "memoryReservation": 256,
+    "environment": [],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group_name}",
+        "awslogs-region": "${log_group_region}",
+        "awslogs_stream-prefix": "auth-service"
+      }
+    },
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ]
+  }
+]
